@@ -1,2 +1,21 @@
 # Local-only files - never commit
 New Design/
+
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env - secrets live in Vercel / .env.local, never in git
+.env
+.env.*
+!.env.example
+
+# misc
+.DS_Store
+npm-debug.log*
+.vercel

@@ -1,0 +1,307 @@
+/* ==========================================================================
+   Navigation — floating pill + menu.
+   Home:  beside the bass neck (fixed) ≥ 900px; sticky compact pill with a
+          full-screen menu below 900px (mobile design).
+   Pages: Gallery / Courses — full-width fixed pill (design: hamburger < 900px);
+          compact variant below 640px so the pill fits a phone.
+   ========================================================================== */
+
+.nav {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 8px 8px 22px;
+  border-radius: 999px;
+  background: rgba(16, 10, 7, 0.84);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: var(--cream);
+  border: 1px solid rgba(243, 234, 220, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+/* home: sits to the right of the neck */
+.nav--home {
+  left: calc(var(--gut) + var(--neck) * 1.75 + 14px);
+}
+
+.nav-logo {
+  color: var(--cream);
+  text-decoration: none;
+  white-space: nowrap;
+  font-family: var(--ff-serif);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.nav-links a {
+  color: var(--soft);
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 999px;
+}
+.nav-links a:hover {
+  background: rgba(243, 234, 220, 0.08);
+  color: #fff;
+}
+.nav-links a[aria-current='page'] {
+  color: #fff;
+  background: rgba(243, 234, 220, 0.1);
+}
+
+.nav-right {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.nav-book {
+  background: var(--amber);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.nav-book:hover {
+  background: var(--amber-hi);
+  color: var(--ink);
+}
+.lbl-short {
+  display: none;
+}
+
+.nav-burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(243, 234, 220, 0.1);
+  color: var(--cream);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0;
+}
+.nav-burger span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+}
+
+/* ---- menu ------------------------------------------------------------- */
+.menu {
+  position: fixed;
+  top: 84px;
+  left: 14px;
+  right: 14px;
+  z-index: 29;
+  border-radius: 28px;
+  background: rgba(20, 13, 9, 0.96);
+  border: 1px solid rgba(243, 234, 220, 0.08);
+  padding: 12px;
+  display: grid;
+  gap: 2px;
+}
+.menu--home {
+  left: calc(var(--gut) + var(--neck) * 1.75 + 14px);
+}
+.menu-list {
+  display: grid;
+  gap: 2px;
+}
+.menu-link {
+  color: var(--cream);
+  text-decoration: none;
+  padding: 14px 16px;
+  border-radius: 18px;
+  font-size: 17px;
+}
+.menu-link:hover {
+  background: rgba(243, 234, 220, 0.06);
+}
+.menu-link[aria-current='page'] {
+  background: rgba(243, 234, 220, 0.08);
+}
+/* mobile-menu-only pieces */
+.menu-head,
+.menu-social,
+.menu-link--book {
+  display: none;
+}
+
+/* ---- home: below 1180px the links collapse into the hamburger --------- */
+@media (max-width: 1179px) {
+  .nav--home .nav-links {
+    display: none;
+  }
+  .nav--home .nav-burger {
+    display: flex;
+  }
+}
+
+/* ---- pages: below 900px ------------------------------------------------ */
+@media (max-width: 899px) {
+  .nav--page .nav-links {
+    display: none;
+  }
+  .nav--page .nav-burger {
+    display: flex;
+  }
+}
+
+/* ---- compact pill (mobile design) --------------------------------------
+   Home below 900px; Gallery / Courses below 640px. */
+@media (max-width: 899px) {
+  .nav--home {
+    position: sticky;
+    top: 10px;
+    left: auto;
+    right: auto;
+    gap: 10px;
+    margin: 10px 12px 0;
+    padding: 8px 8px 8px 20px;
+    background: rgba(16, 10, 7, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+@media (max-width: 899px) {
+  .nav--home .nav-logo {
+    font-size: 20px;
+  }
+  .nav--home .nav-right {
+    flex: none;
+  }
+  .nav--home .nav-book {
+    font-size: 13px;
+    padding: 11px 16px;
+  }
+  .nav--home .nav-burger {
+    width: 40px;
+    height: 40px;
+    flex: none;
+  }
+  .nav--home .lbl-long {
+    display: none;
+  }
+  .nav--home .lbl-short {
+    display: inline;
+  }
+
+  /* full-screen menu */
+  .menu--home {
+    inset: 0;
+    z-index: 40;
+    border: 0;
+    border-radius: 0;
+    background: var(--ink);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 0;
+    padding: 14px 18px 32px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .menu--home .menu-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 2px 8px;
+  }
+  .menu--home .menu-logo {
+    color: var(--cream);
+    font-family: var(--ff-serif);
+    font-size: 22px;
+  }
+  .menu--home .menu-close {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: rgba(243, 234, 220, 0.1);
+    color: var(--cream);
+    font-size: 18px;
+    cursor: pointer;
+    flex: none;
+  }
+  .menu--home .menu-list {
+    align-content: center;
+  }
+  .menu--home .menu-link {
+    padding: 16px 6px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(243, 234, 220, 0.08);
+    font-size: 19px;
+  }
+  .menu--home .menu-link:hover {
+    background: none;
+  }
+  .menu--home .menu-list > .menu-link:last-child {
+    border-bottom: 0;
+  }
+  .menu--home .menu-link--book {
+    display: block;
+    color: var(--amber);
+    font-weight: 600;
+  }
+  .menu--home .menu-social {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding-top: 18px;
+  }
+  .menu--home .menu-social a {
+    color: var(--soft);
+    text-decoration: none;
+    font-size: 13px;
+  }
+}
+
+/* Gallery / Courses on phones: same compact pill so it fits 375px. */
+@media (max-width: 639px) {
+  .nav--page {
+    gap: 10px;
+    padding: 8px 8px 8px 20px;
+  }
+  .nav--page .nav-logo {
+    font-size: 20px;
+  }
+  .nav--page .nav-book {
+    font-size: 13px;
+    padding: 11px 16px;
+  }
+  .nav--page .nav-burger {
+    width: 40px;
+    height: 40px;
+  }
+  .nav--page .lbl-long {
+    display: none;
+  }
+  .nav--page .lbl-short {
+    display: inline;
+  }
+  .menu--page {
+    top: 76px;
+  }
+}
