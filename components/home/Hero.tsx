@@ -33,8 +33,6 @@ export default function Hero() {
             width={hero.width}
             height={hero.height}
             alt={hero.alt}
-            sizes="(max-width: 899px) 100vw, 420px"
-            quality={90}
             priority
           />
           <div className="hero-badge">

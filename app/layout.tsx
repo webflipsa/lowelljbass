@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
-import { SITE, SOCIALS } from '@/lib/site';
+import { OG_BASE, ROBOTS } from '@/lib/seo';
+import { SITE } from '@/lib/site';
 import './globals.css';
 import './nav.css';
 import './home.css';
@@ -36,34 +37,27 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: SITE.title,
   description: SITE.description,
+  applicationName: SITE.name,
+  authors: [{ name: SITE.name, url: SITE.url }],
+  creator: SITE.name,
+  publisher: SITE.name,
+  category: 'music',
   alternates: { canonical: '/' },
-  openGraph: {
-    type: 'website',
-    siteName: SITE.name,
-    locale: 'en_ZA',
-    url: '/',
-    title: SITE.title,
-    description: SITE.description,
-    images: [{ url: '/assets/img/lowell-hero.jpg', width: 720, height: 960, alt: 'Lowell Jeffery holding his sunburst bass' }],
+  robots: ROBOTS,
+  // Open Graph / Twitter images come from the opengraph-image.tsx files (app/, app/courses, app/gallery).
+  openGraph: { ...OG_BASE, url: '/', title: SITE.shareTitle, description: SITE.shareDescription },
+  twitter: { card: 'summary_large_image', title: SITE.shareTitle, description: SITE.shareDescription },
+  // Search-engine ownership checks (Google Search Console / Bing Webmaster Tools). Set in Vercel env; see README.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } : undefined,
   },
-  twitter: { card: 'summary_large_image', title: SITE.title, description: SITE.description, images: ['/assets/img/lowell-hero.jpg'] },
 };
 
 export const viewport: Viewport = {
   themeColor: '#9E7148',
   width: 'device-width',
   initialScale: 1,
-};
-
-const personJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: SITE.name,
-  url: SITE.url,
-  jobTitle: 'Bassist & music educator',
-  description: SITE.description,
-  image: `${SITE.url}/assets/img/lowell-hero.jpg`,
-  sameAs: Object.values(SOCIALS),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -73,10 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Marks JS as available before first paint so scroll-reveal starts hidden without a flash. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>
-      <body>
-        {children}
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

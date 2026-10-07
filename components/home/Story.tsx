@@ -18,8 +18,8 @@ export default function Story() {
           </h2>
           <p data-reveal="m" className="story-p">
             Lowell cut his teeth on jazz — walking lines, standards and the discipline of listening. Over time the rooms got bigger:
-            contemporary rock, blues, pop, and two decades on the worship team at Christian Revival Church across Bloemfontein, Johannesburg
-            and Pretoria.
+            contemporary rock, blues, pop, and two decades as bassist on the worship team at Christian Revival Church (CRC) across
+            Bloemfontein, Johannesburg and Pretoria.
           </p>
           <p data-reveal="m" className="story-p">
             Today he teaches what the stage taught him: great bass playing is less about more notes, and more about feel, pocket and tone.
@@ -31,8 +31,8 @@ export default function Story() {
           </div>
         </div>
         <div data-reveal="" className="story-photos">
-          <Image className="story-img" src={a.src} width={a.width} height={a.height} alt={a.alt} sizes="(max-width: 899px) 50vw, 30vw" quality={90} />
-          <Image className="story-img story-img--sq" src={b.src} width={b.width} height={b.height} alt={b.alt} sizes="(max-width: 899px) 40vw, 25vw" quality={90} />
+          <Image className="story-img" src={a.src} width={a.width} height={a.height} alt={a.alt} />
+          <Image className="story-img story-img--sq" src={b.src} width={b.width} height={b.height} alt={b.alt} />
         </div>
       </div>
     </section>

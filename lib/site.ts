@@ -1,12 +1,29 @@
+/** Normalises "lowelljeffery", "lowelljeffery/bass-lesson" or a full cal.com URL to just the path part. */
+const calLink = (process.env.NEXT_PUBLIC_CAL_LINK || '')
+  .trim()
+  .replace(/^https?:\/\/(?:app\.)?cal\.com\//i, '')
+  .replace(/^\/+|\/+$/g, '');
+
 export const SITE = {
   name: 'Lowell Jeffery',
   domain: 'lowelljeffery.co.za',
   url: (process.env.NEXT_PUBLIC_SITE_URL || 'https://lowelljeffery.co.za').replace(/\/$/, ''),
-  title: 'Lowell Jeffery — Bassist & Educator · Discover your tone',
+
+  /* ---- search / social copy ------------------------------------------------
+     Home title ≈ 61 chars and description ≈ 150 chars so neither is truncated in Google results.
+     Target phrases: bass lessons (online / in person) · bass courses · experienced bass teacher ·
+     bass player bookings · CRC bassist · Lowell Jeffery. */
+  title: 'Lowell Jeffery | Bass Lessons, Courses & Bass Player Bookings',
   description:
-    'Lowell Jeffery — bassist, educator and worship musician with 25+ years across jazz, rock, blues, pop and gospel. Bass & guitar lessons in person and online.',
-  /** Cal.com / Calendly link. When set, the booking panel embeds it and the CTA opens it. */
-  bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || '',
+    'Experienced bass teacher and CRC worship bassist Lowell Jeffery. Bass lessons online or in person, bass courses and bass player bookings in South Africa.',
+  shareTitle: 'Lowell Jeffery — Bass Teacher, Bassist & CRC Worship Bassist',
+  shareDescription:
+    'Bass lessons online or in person, online bass courses and bass player bookings with experienced bassist and bass teacher Lowell Jeffery. 25+ years across jazz, rock, blues, pop and gospel.',
+  /** Bump when page content changes materially (feeds the sitemap's <lastmod>). */
+  updated: '2026-10-07',
+
+  /** Cal.com booking page, e.g. "lowelljeffery" or "lowelljeffery/bass-lesson". Empty until configured. */
+  booking: { calLink, url: calLink ? `https://cal.com/${calLink}` : '' },
 } as const;
 
 export const SOCIALS = {

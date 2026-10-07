@@ -18,7 +18,7 @@ export default function Courses() {
         </div>
         <div className="courses-stack">
           <article data-reveal="" className="course-card">
-            <Image className="course-img" src={art.src} width={art.width} height={art.height} alt={art.alt} sizes="(max-width: 899px) 90vw, 40vw" quality={90} />
+            <Image className="course-img" src={art.src} width={art.width} height={art.height} alt={art.alt} />
             <div className="course-text">
               <span className="badge-amber">Featured course</span>
               <h3 className="course-title">

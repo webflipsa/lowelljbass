@@ -8,10 +8,13 @@ import Lessons from '@/components/home/Lessons';
 import Media from '@/components/home/Media';
 import Story from '@/components/home/Story';
 import Testimonials from '@/components/home/Testimonials';
+import JsonLd from '@/components/JsonLd';
 import NeckEngine from '@/components/NeckEngine';
 import RevealObserver from '@/components/RevealObserver';
 import SiteNav from '@/components/SiteNav';
+import { BASS_ART } from '@/lib/photos';
 import { FLAGS } from '@/lib/site';
+import { homeJsonLd } from '@/lib/structured-data';
 
 export default function HomePage() {
   return (
@@ -34,13 +37,11 @@ export default function HomePage() {
         <main className="neck-layer">
           <Image
             className="headstock"
-            src="/assets/img/bass/headstock-p4.png"
-            width={421}
-            height={769}
+            src={BASS_ART.headstock.src}
+            width={BASS_ART.headstock.width}
+            height={BASS_ART.headstock.height}
             alt=""
             aria-hidden="true"
-            sizes="421px"
-            quality={90}
             loading="eager"
           />
           <div id="lj-neck" className="neck" />
@@ -58,6 +59,7 @@ export default function HomePage() {
         <Contact />
       </div>
 
+      <JsonLd data={homeJsonLd()} />
       <NeckEngine vibration={FLAGS.stringVibration} sound={FLAGS.stringSound} />
       <RevealObserver />
     </div>

@@ -23,8 +23,6 @@ export default function Involvements() {
                   width={c.photo.width}
                   height={c.photo.height}
                   alt={c.photo.alt}
-                  sizes="(max-width: 899px) 90vw, 30vw"
-                  quality={90}
                   style={c.focus ? { objectPosition: c.focus } : undefined}
                 />
               ) : (

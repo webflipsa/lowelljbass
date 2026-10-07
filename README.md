@@ -1,7 +1,7 @@
 # lowelljeffery.co.za
 
-Website for **Lowell Jeffery** — bassist, educator and worship musician.
-Next.js (App Router) + TypeScript, deployed on Vercel, forms sent through Resend.
+Website for **Lowell Jeffery** — bassist, bass teacher and worship musician.
+Next.js (App Router) + TypeScript, deployed on Vercel, forms sent through Resend, bookings through Cal.com.
 
 Pages: **Home** (`/`, the "bass guitar" one-pager), **Gallery** (`/gallery`), **Courses** (`/courses`).
 
@@ -13,25 +13,31 @@ cp .env.example .env.local   # fill in as needed — the site runs without any k
 npm run dev                  # http://localhost:3000
 npm run build && npm start   # production build
 npm run typecheck
+npm run img -- <photo> <descriptive-name>   # convert a photo to SEO-friendly WebP (see "Images")
 ```
 
 Without `RESEND_API_KEY` the contact / "notify me" forms still work in development (they log the message to the
 terminal instead of emailing it); in production they return a friendly error until Resend is configured.
 
-## Going live (Vercel + Resend + domain)
+## Going live (Vercel + Resend + Cal.com + domain)
 
-1. **Vercel** — import the repo (framework auto-detects as Next.js). Add the environment variables below to the project.
+1. **Vercel** — import the repo (framework auto-detects as Next.js). Add the environment variables below.
 2. **Domain** — Project → Settings → Domains → add `lowelljeffery.co.za` (and `www`, redirecting to the apex). Point DNS at Vercel as it instructs.
 3. **Resend** — add and verify `lowelljeffery.co.za` in Resend (DNS records: SPF/DKIM). Create an API key.
-4. Set these in Vercel (Production + Preview):
+4. **Cal.com** — follow **[docs/booking-cal-com.md](docs/booking-cal-com.md)**, then set `NEXT_PUBLIC_CAL_LINK`.
+5. **Search engines** — follow **[docs/seo-checklist.md](docs/seo-checklist.md)** (Search Console, Google Business Profile, backlinks).
 
 | Variable | Purpose |
 | --- | --- |
 | `RESEND_API_KEY` | Resend API key |
 | `CONTACT_TO_EMAIL` | Inbox that receives enquiries and course sign-ups |
 | `CONTACT_FROM_EMAIL` | Sender on the verified domain, e.g. `Lowell Jeffery <website@lowelljeffery.co.za>` |
-| `NEXT_PUBLIC_SITE_URL` | `https://lowelljeffery.co.za` (canonical URLs, sitemap, Open Graph) |
-| `NEXT_PUBLIC_BOOKING_URL` | *(optional)* Cal.com / Calendly link — fills the booking panel and the "Open booking calendar" button |
+| `NEXT_PUBLIC_SITE_URL` | `https://lowelljeffery.co.za` (canonical URLs, sitemap, Open Graph, structured data) |
+| `NEXT_PUBLIC_CAL_LINK` | Your Cal.com path, e.g. `lowelljeffery` — switches on the live booking calendar. Empty = button goes to the contact form |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | *(optional)* Search Console HTML-tag value |
+| `NEXT_PUBLIC_BING_SITE_VERIFICATION` | *(optional)* Bing Webmaster Tools value |
+
+`NEXT_PUBLIC_*` values are baked in at build time — redeploy after changing them.
 
 ### Supabase (later)
 Not wired up yet. The natural seams are `app/api/subscribe/route.ts` (store course sign-ups as well as emailing them) and
@@ -42,28 +48,50 @@ Not wired up yet. The natural seams are `app/api/subscribe/route.ts` (store cour
 ```
 app/
   page.tsx            Home — assembles the sections + the bass neck
-  gallery/ courses/   The two sub-pages
+  gallery/ courses/   The two sub-pages (each with its own opengraph-image.tsx share card)
   api/contact|subscribe/route.ts   Resend-backed form endpoints (validation, honeypot, rate limit)
-  layout.tsx          Fonts, metadata, JSON-LD
+  layout.tsx          Fonts + site-wide metadata
+  opengraph-image.tsx Social share card for the home page
+  sitemap.ts robots.ts icon.svg
   globals.css  nav.css  home.css  subpage.css   All styling (tokens at the top of globals.css)
-  fonts/              Self-hosted Hanken Grotesk, Instrument Serif, JetBrains Mono
+  fonts/              Self-hosted Hanken Grotesk, Instrument Serif, JetBrains Mono (+ og/ TTFs for share cards)
 components/
   home/*.tsx          One file per home section (Hero, Story, Media, …)
   NeckEngine.tsx      Neck interactions: pluck on click, string wobble, scroll vibration, fret-dot glow
+  CalEmbed.tsx CalInline.tsx   Lazy-loaded Cal.com booking widget
+  JsonLd.tsx          Renders structured data
   RevealObserver.tsx  Scroll-reveal
   SiteNav.tsx  ContactForm.tsx  NotifyForm.tsx  ui.tsx
 lib/
-  content.ts          ← edit copy-like data here: involvements, lessons, dates, testimonials, gallery
-  site.ts             Site URL, social links, feature flags
-  photos.ts           Photo catalogue (sizes needed by next/image)
-public/assets/img/    Photos + bass artwork from the design, carried over as-is
+  content.ts          ← edit data here: involvements, lessons, dates, testimonials, gallery
+  site.ts             Site URL, SEO title/description, social links, feature flags, Cal link
+  photos.ts           Photo catalogue: file names, sizes and alt text
+  structured-data.ts  schema.org JSON-LD (Person, Services, Course, ImageGallery, breadcrumbs)
+  seo.ts og.tsx       Shared metadata helpers, share-card renderer
+public/assets/img/    All images — WebP, descriptively named
+scripts/convert-image.mjs   Converts a photo to WebP with a keyword file name
+docs/                 booking-cal-com.md, seo-checklist.md
 ```
 
 ### Common edits
-- **Upcoming dates / testimonials** — `DATES` and `TESTIMONIALS` in `lib/content.ts`. They currently hold the design's bracketed placeholders (`[Gig / service / workshop]`, `[Student quote …]`).
-- **Gallery** — drop the file in `public/assets/img/`, add it to `PHOTOS` (`lib/photos.ts`) and to a year in `GALLERY` (`lib/content.ts`); lower that year's `emptySlots` to retire a placeholder tile (set to `0` to hide them).
-- **Social links, booking link, flags** — `lib/site.ts`.
+- **Upcoming dates / testimonials** — `DATES` and `TESTIMONIALS` in `lib/content.ts`. They currently hold the design's bracketed placeholders (`[Gig / service / workshop]`, `[Student quote …]`) — replace before launch.
+- **Gallery** — convert the photo (see *Images*), add it to `PHOTOS` (`lib/photos.ts`) and to a year in `GALLERY` (`lib/content.ts`); lower that year's `emptySlots` to retire a placeholder tile (`0` hides them).
+- **Search titles / descriptions** — `lib/site.ts` (home) and the `pageMetadata({...})` call at the top of `app/gallery/page.tsx` and `app/courses/page.tsx`.
+- **Social links, feature flags** — `lib/site.ts`.
 - **Courses** — the featured course lives in `components/home/Courses.tsx` (teaser) and `app/courses/page.tsx` (full page). Price is "TBC" and the buttons are `#` until a checkout exists.
+
+### Images
+All site images are WebP and keep **descriptive, keyword-bearing file names**, because Google Images reads them.
+
+```bash
+npm run img -- ~/Downloads/IMG_4021.jpg lowell-jeffery-online-bass-lesson
+# → public/assets/img/lowell-jeffery-online-bass-lesson.webp  (quality 88, max 2000px, EXIF rotated, metadata stripped)
+npm run img -- art/logo.png my-logo --dir=bass --quality=96      # graphics with transparency
+npm run img -- art/texture.png my-texture --lossless             # textures that must stay pixel-exact
+```
+The script prints the width/height and a ready-made `photos.ts` line. Then write an honest **alt text**: say what's in the picture,
+naturally (who, where, what instrument) — no keyword lists. Images are served straight from `/assets/img/…` (`images.unoptimized`
+in `next.config.ts`) so the URLs stay clean; `next/image` still reserves space (no layout shift) and lazy-loads.
 
 ## Design notes
 
@@ -78,11 +106,13 @@ files for layout parity — section positions and heights match the originals at
 
 ### Deliberate differences from the design files
 - Footer link reads "Back to lowelljeffery.co.za" (the design said `.com`).
-- "Open booking calendar" falls back to `#contact` while no `NEXT_PUBLIC_BOOKING_URL` is set (the design links to `#`).
+- **SEO wording** (light edits to the design's sentences): the story says "two decades as bassist … at Christian Revival Church (CRC)"; the booking panel says "Book bass lessons with an experienced teacher — …"; the contact line says "Bass lessons, session work, worship-team coaching or bass player bookings"; the courses page lead says "Self-paced online bass courses …". Page `<title>`s and descriptions are keyword-led rather than the design's.
+- "Open booking calendar" opens your Cal.com page, or scrolls to the contact form until `NEXT_PUBLIC_CAL_LINK` is set (the design links to `#`); the grey scheduler placeholder becomes the live calendar.
 - Forms are real (Resend) with a honeypot, validation and an error line; the success label is the design's "Thanks — sent".
 - Gallery/Courses use the compact "Book" pill below 640px so the nav fits a phone (the design only specified their desktop nav).
 - Added keyboard focus styles, `aria-expanded` on the menu button, and Escape-to-close; the design removed field outlines.
 - The design's `<image-slot>` (a design-tool drag-and-drop placeholder) is replaced by data-driven tiles plus static dashed "reserved" tiles.
+- Images are WebP (smaller, same look): photos at quality 88, the bass artwork at quality 96, the neck texture lossless.
 
 ## Notes
 - `AGENTS.md` is generated by Next.js (it points coding agents at the docs bundled in `node_modules/next/dist/docs/`); keep it.

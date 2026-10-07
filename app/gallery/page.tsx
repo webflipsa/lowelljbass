@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import JsonLd from '@/components/JsonLd';
 import RevealObserver from '@/components/RevealObserver';
 import SiteNav from '@/components/SiteNav';
 import { Tag } from '@/components/ui';
 import { GALLERY } from '@/lib/content';
+import { pageMetadata } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { galleryJsonLd } from '@/lib/structured-data';
 
-const description = 'Photo gallery of Lowell Jeffery — bassist, educator and worship musician — on stage and behind the scenes, updated year by year.';
-
-export const metadata: Metadata = {
-  title: { absolute: 'Lowell Jeffery — Gallery' },
-  description,
-  alternates: { canonical: '/gallery' },
-  openGraph: { url: '/gallery', title: 'Lowell Jeffery — Gallery', description },
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/gallery',
+  title: 'Photo Gallery | Lowell Jeffery — Live & Worship Bassist',
+  description:
+    'Photos of Lowell Jeffery — experienced bassist, bass teacher and CRC worship bassist — live on stage, in worship and behind the scenes, sorted by year.',
+});
 
 /** Empty "reserved" tile — dashed outline + picture glyph + caption. */
 function Slot({ caption, ratio }: { caption: string; ratio?: boolean }) {
@@ -66,8 +67,6 @@ export default function GalleryPage() {
                   width={t.width}
                   height={t.height}
                   alt={t.alt}
-                  sizes="(max-width: 700px) 100vw, (max-width: 1400px) 33vw, 460px"
-                  quality={90}
                   style={t.focus ? { objectPosition: t.focus } : undefined}
                 />
               ))}
@@ -84,6 +83,7 @@ export default function GalleryPage() {
         <Link href="/#top">Back to {SITE.domain}</Link>
       </footer>
 
+      <JsonLd data={galleryJsonLd()} />
       <RevealObserver />
     </div>
   );

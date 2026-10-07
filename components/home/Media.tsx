@@ -41,7 +41,7 @@ export default function Media() {
           </div>
 
           <a data-reveal="" href={SOCIALS.youtube} target="_blank" rel="noopener" className="video">
-            <Image src={stage.src} alt="" fill sizes="(max-width: 899px) 100vw, 70vw" quality={90} className="video-bg" />
+            <Image src={stage.src} alt="" fill className="video-bg" />
             <div className="video-inner">
               <span className="video-play">
                 <span className="video-tri" />
@@ -62,8 +62,6 @@ export default function Media() {
                 width={photo.width}
                 height={photo.height}
                 alt={photo.alt}
-                sizes="(max-width: 899px) 50vw, 25vw"
-                quality={90}
               />
             ))}
           </div>

@@ -1,9 +1,10 @@
+import CalEmbed from '../CalEmbed';
 import { LESSONS } from '@/lib/content';
 import { SITE } from '@/lib/site';
 import { Both, NeckCells, Tag } from '../ui';
 
 export default function Lessons() {
-  const booking = SITE.bookingUrl;
+  const { calLink, url: bookingUrl } = SITE.booking;
   return (
     <section id="lessons" data-fret="9" data-screen-label="Lessons" className="fret-row">
       <NeckCells fret={9} />
@@ -46,19 +47,18 @@ export default function Lessons() {
         <div id="book" data-reveal="" className="book-panel">
           <div className="book-copy">
             <h3 className="book-title">Book a lesson</h3>
-            <p>Pick a time that suits you — in person or online. First lesson includes a quick tone and technique check-up.</p>
-            {/* With no booking URL configured yet, send people to the contact form rather than a dead link. */}
-            <a
-              href={booking || '#contact'}
-              className="btn-amber"
-              {...(booking ? { target: '_blank', rel: 'noopener' } : {})}
-            >
+            <p>
+              Book bass lessons with an experienced teacher — pick a time that suits you, in person or online. First lesson includes a
+              quick tone and technique check-up.
+            </p>
+            {/* Until the Cal.com link is configured (NEXT_PUBLIC_CAL_LINK), send people to the contact form instead of a dead link. */}
+            <a href={bookingUrl || '#contact'} className="btn-amber" {...(bookingUrl ? { target: '_blank', rel: 'noopener' } : {})}>
               Open booking calendar ↗
             </a>
           </div>
-          <div className={booking ? 'book-embed book-embed--live' : 'book-embed'}>
-            {booking ? (
-              <iframe src={booking} title="Book a lesson" loading="lazy" />
+          <div className={calLink ? 'book-embed book-embed--live' : 'book-embed'}>
+            {calLink ? (
+              <CalEmbed calLink={calLink} />
             ) : (
               <span>
                 Cal.com / Calendly

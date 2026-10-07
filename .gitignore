@@ -1,5 +1,7 @@
 # Local-only files - never commit
 New Design/
+# Session handoff notes + scratch space for working with Claude (never committed)
+.handoff/
 
 # dependencies
 node_modules/

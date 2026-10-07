@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { BASS_ART } from '@/lib/photos';
 import { SOCIALS } from '@/lib/site';
 import ContactForm from '../ContactForm';
 import { SocialPills, Tag } from '../ui';
@@ -15,7 +16,7 @@ export default function Contact() {
     <footer id="contact" data-fret="20" data-screen-label="Contact" className="fret-row contact">
       <div className="gutter" />
       <div className="neck-cell neck-cell--body" data-neck="20">
-        <Image className="body-img" src="/assets/img/bass/body.png" width={760} height={784} alt="" aria-hidden="true" sizes="(max-width: 1488px) 34vw, 420px" quality={90} />
+        <Image className="body-img" src={BASS_ART.body.src} width={BASS_ART.body.width} height={BASS_ART.body.height} alt="" aria-hidden="true" />
       </div>
       <div className="contact-body">
         <div className="contact-grid">
@@ -27,7 +28,7 @@ export default function Contact() {
               <em>your tone.</em>
             </h2>
             <p className="contact-lead">
-              Lessons, session work, worship-team coaching or bookings — send a note and Lowell will get back to you.
+              Bass lessons, session work, worship-team coaching or bass player bookings — send a note and Lowell will get back to you.
             </p>
             <div className="contact-social">
               <SocialPills items={SOCIAL_LINKS} className="pill-ink" />

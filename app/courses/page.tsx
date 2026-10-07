@@ -1,21 +1,22 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import JsonLd from '@/components/JsonLd';
 import NotifyForm from '@/components/NotifyForm';
 import RevealObserver from '@/components/RevealObserver';
 import SiteNav from '@/components/SiteNav';
 import { Tag } from '@/components/ui';
 import { PHOTOS } from '@/lib/photos';
+import { pageMetadata } from '@/lib/seo';
 import { SITE } from '@/lib/site';
+import { coursesJsonLd } from '@/lib/structured-data';
 
-const description = 'Bass courses by Lowell Jeffery — self-paced study for new and intermediate players.';
-
-export const metadata: Metadata = {
-  title: { absolute: 'Lowell Jeffery — Courses' },
-  description,
-  alternates: { canonical: '/courses' },
-  openGraph: { url: '/courses', title: 'Lowell Jeffery — Courses', description },
-};
+export const metadata: Metadata = pageMetadata({
+  path: '/courses',
+  title: 'Online Bass Courses — The Art of the Feel | Lowell Jeffery',
+  description:
+    'Self-paced online bass courses by Lowell Jeffery. The Art of the Feel is a bass transcription and ear-training course for new and intermediate bassists.',
+});
 
 const POINTS = [
   'Ear training from real recordings',
@@ -39,11 +40,11 @@ export default function CoursesPage() {
           <h1 className="pg-h1">
             Learn at your own <em>tempo.</em>
           </h1>
-          <p className="pg-lead">Self-paced study to build real playing habits — one course live now, more in production.</p>
+          <p className="pg-lead">Self-paced online bass courses to build real playing habits — one course live now, more in production.</p>
         </header>
 
         <article data-reveal="" className="cp-card">
-          <Image className="cp-img" src={art.src} width={art.width} height={art.height} alt={art.alt} sizes="(max-width: 900px) 90vw, 560px" quality={90} priority />
+          <Image className="cp-img" src={art.src} width={art.width} height={art.height} alt={art.alt} priority />
           <div className="cp-text">
             <span className="badge-amber">Featured course</span>
             <h2 className="cp-title">
@@ -89,6 +90,7 @@ export default function CoursesPage() {
         <Link href="/#top">Back to {SITE.domain}</Link>
       </footer>
 
+      <JsonLd data={coursesJsonLd()} />
       <RevealObserver />
     </div>
   );

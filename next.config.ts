@@ -4,10 +4,10 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    formats: ['image/avif', 'image/webp'],
-    // The photos are already compressed JPEGs - keep re-encoding quality high so
-    // they match the design files.
-    qualities: [75, 90],
+    // Every image is pre-converted to WebP (see scripts/convert-image.mjs) and served straight from
+    // /assets/img/<descriptive-name>.webp — clean, keyword-bearing URLs for Google Images, no runtime
+    // re-encoding. next/image is still used for width/height (no layout shift) and lazy loading.
+    unoptimized: true,
   },
   async headers() {
     return [
