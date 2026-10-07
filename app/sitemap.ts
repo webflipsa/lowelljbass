@@ -17,6 +17,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     { url: SITE.url, lastModified, changeFrequency: 'monthly', priority: 1, images: home },
+    { url: abs('/bass-lessons'), lastModified, changeFrequency: 'monthly', priority: 0.9, images: [abs(PHOTOS.sunburst.src)] },
+    {
+      url: abs('/book-a-bassist'),
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+      images: [PHOTOS.stageLights, PHOTOS.churchStage, PHOTOS.dreamweek, PHOTOS.crc, PHOTOS.worshipStage].map((p) => abs(p.src)),
+    },
     { url: abs('/courses'), lastModified, changeFrequency: 'monthly', priority: 0.8, images: [abs(PHOTOS.courseArt.src)] },
     { url: abs('/gallery'), lastModified, changeFrequency: 'monthly', priority: 0.6, images: gallery },
   ];

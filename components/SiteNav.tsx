@@ -10,6 +10,8 @@ type Props = {
   variant: 'home' | 'page';
   /** Key of the current page link (PAGE_NAV) — rendered highlighted. */
   active?: string;
+  /** Where the amber pill button goes and what it says; defaults to "Book a lesson" → the home booking panel. */
+  book?: { href: string; long: string; short: string };
 };
 
 /** Breakpoints at which the nav switches layout — kept in sync with nav.css. */
@@ -40,12 +42,14 @@ function NavLink({ href, className, onClick, current, children }: LinkProps) {
   );
 }
 
-export default function SiteNav({ variant, active }: Props) {
+export default function SiteNav({ variant, active, book }: Props) {
   const [open, setOpen] = useState(false);
   const home = variant === 'home';
   const items = home ? HOME_NAV : PAGE_NAV;
   const logoHref = home ? '#top' : '/#top';
-  const bookHref = home ? '#book' : '/#book';
+  const bookHref = book?.href ?? (home ? '#book' : '/#book');
+  const bookLong = book?.long ?? 'Book a lesson';
+  const bookShort = book?.short ?? 'Book';
   const close = () => setOpen(false);
 
   // Close the menu when the viewport crosses a nav breakpoint, and on Escape.
@@ -76,8 +80,8 @@ export default function SiteNav({ variant, active }: Props) {
         </div>
         <div className="nav-right">
           <NavLink href={bookHref} className="nav-book">
-            <span className="lbl-long">Book a lesson</span>
-            <span className="lbl-short">Book</span>
+            <span className="lbl-long">{bookLong}</span>
+            <span className="lbl-short">{bookShort}</span>
           </NavLink>
           <button
             type="button"

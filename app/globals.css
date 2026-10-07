@@ -37,8 +37,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Gallery is the one page with a near-black base. */
-body:has(.page-gallery) {
+/* Gallery and Bookings are the pages with a near-black base. */
+body:has(.page-gallery),
+body:has(.page-bookings) {
   background: #140c08;
 }
 
@@ -167,7 +168,9 @@ textarea:focus-visible {
 
 /* ---- scroll-reveal shared variables per page ---------------------------- */
 .page-gallery,
-.page-courses {
+.page-courses,
+.page-lessons,
+.page-bookings {
   --reveal-y: 24px;
   --reveal-dur: 0.8s;
 }

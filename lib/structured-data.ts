@@ -7,10 +7,14 @@
  *  - an in-person teaching location → add a `LocalBusiness` with `address` + `geo` (and a Google Business Profile)
  *  - confirmed gigs → add `Event` entries (name, startDate, location) next to DATES in lib/content.ts
  *  - a price for The Art of the Feel → add `offers` to the Course
+ *  - real reviews → add `review` / `aggregateRating` to the Services (never for invented ones)
+ *
+ * The bass-lessons and bookings Services each have one canonical home on their own page (/bass-lessons,
+ * /book-a-bassist); the home page repeats the identical node so Google sees the same entity everywhere.
  */
-import { GALLERY } from './content';
+import { BOOKING_FAQ, GALLERY, LESSON_FAQ, LESSON_TERMS, type FaqItem } from './content';
 import { PHOTOS } from './photos';
-import { SITE, SOCIALS } from './site';
+import { PAGE_SEO, SITE, SOCIALS } from './site';
 
 const abs = (p: string) => (p.startsWith('http') ? p : `${SITE.url}${p}`);
 
@@ -19,9 +23,11 @@ export const ID = {
   person: `${SITE.url}/#person`,
   homePage: `${SITE.url}/#webpage`,
   heroImage: `${SITE.url}/#primaryimage`,
-  bassLessons: `${SITE.url}/#service-bass-lessons`,
+  bassLessons: `${SITE.url}/bass-lessons#service`,
   guitarLessons: `${SITE.url}/#service-guitar-lessons`,
-  bookings: `${SITE.url}/#service-bass-player-bookings`,
+  bookings: `${SITE.url}/book-a-bassist#service`,
+  lessonsPage: `${SITE.url}/bass-lessons#webpage`,
+  bookingsPage: `${SITE.url}/book-a-bassist#webpage`,
   course: `${SITE.url}/courses#course-the-art-of-the-feel`,
   crc: `${SITE.url}/#org-crc`,
   schoolOfRock: `${SITE.url}/#org-school-of-rock`,
@@ -69,6 +75,55 @@ const person = {
 
 const country = { '@type': 'Country', name: 'South Africa' };
 
+const city = (name: string) => ({ '@type': 'City', name, containedInPlace: country });
+
+/** Bass lessons: in person in Pretoria and Johannesburg, plus online; about an hour at R380. */
+function bassLessonsService() {
+  return {
+    '@type': 'Service',
+    '@id': ID.bassLessons,
+    name: 'Bass lessons — Pretoria, Johannesburg and online',
+    serviceType: 'Bass guitar lessons',
+    description: `Private bass lessons from an experienced bass teacher, in person in Pretoria and Johannesburg or online. Lessons run ${LESSON_TERMS.length} and cost ${LESSON_TERMS.price} each. From first notes to session-ready: groove and time-feel, walking lines and jazz vocabulary, worship-team playing, reading, theory and transcription. The first lesson includes a tone and technique check-up.`,
+    provider: { '@id': ID.person },
+    areaServed: LESSON_TERMS.cities.map(city),
+    audience: { '@type': 'Audience', audienceType: 'Beginner to working bass players' },
+    availableChannel: [
+      { '@type': 'ServiceChannel', name: 'Online bass lessons', serviceUrl: abs('/bass-lessons#book') },
+      {
+        '@type': 'ServiceChannel',
+        name: 'In-person bass lessons in Pretoria and Johannesburg',
+        serviceUrl: abs('/bass-lessons#book'),
+        serviceLocation: LESSON_TERMS.cities.map(city),
+      },
+    ],
+    offers: {
+      '@type': 'Offer',
+      price: LESSON_TERMS.priceAmount,
+      priceCurrency: LESSON_TERMS.currency,
+      description: `One bass lesson, ${LESSON_TERMS.length}`,
+      url: abs('/bass-lessons#book'),
+      seller: { '@id': ID.person },
+    },
+    url: abs('/bass-lessons'),
+  };
+}
+
+/** Session, live and worship-team bookings. No area narrower than the country is claimed. */
+function bookingsService() {
+  return {
+    '@type': 'Service',
+    '@id': ID.bookings,
+    name: 'Bass player bookings — session work, live and worship teams',
+    serviceType: 'Session and live bass player; worship-team coaching',
+    description:
+      'Book an experienced bass player and CRC worship bassist for session work, live performance and worship teams, plus coaching and arrangement help for ministry bands.',
+    provider: { '@id': ID.person },
+    areaServed: country,
+    url: abs('/book-a-bassist'),
+  };
+}
+
 /** Whole-site graph for the home page. */
 export function homeJsonLd() {
   return {
@@ -99,22 +154,7 @@ export function homeJsonLd() {
       person,
       { '@type': 'Organization', '@id': ID.crc, name: 'Christian Revival Church (CRC)', alternateName: 'CRC' },
       { '@type': 'Organization', '@id': ID.schoolOfRock, name: 'School of Rock' },
-      {
-        '@type': 'Service',
-        '@id': ID.bassLessons,
-        name: 'Bass lessons — online or in person',
-        serviceType: 'Bass guitar lessons',
-        description:
-          'Private bass lessons from first notes to session-ready: groove and time-feel, walking lines and jazz vocabulary, worship-team playing, reading, theory and transcription. In person or online; the first lesson includes a tone and technique check-up.',
-        provider: { '@id': ID.person },
-        areaServed: country,
-        audience: { '@type': 'Audience', audienceType: 'Beginner to working bass players' },
-        availableChannel: [
-          { '@type': 'ServiceChannel', name: 'Online bass lessons', serviceUrl: `${SITE.url}/#book` },
-          { '@type': 'ServiceChannel', name: 'In-person bass lessons', serviceUrl: `${SITE.url}/#book` },
-        ],
-        url: `${SITE.url}/#lessons`,
-      },
+      bassLessonsService(),
       {
         '@type': 'Service',
         '@id': ID.guitarLessons,
@@ -125,17 +165,7 @@ export function homeJsonLd() {
         areaServed: country,
         url: `${SITE.url}/#lessons`,
       },
-      {
-        '@type': 'Service',
-        '@id': ID.bookings,
-        name: 'Bass player bookings — session work, live and worship teams',
-        serviceType: 'Session and live bass player; worship-team coaching',
-        description:
-          'Book an experienced bass player for session work, live performance and worship teams, plus coaching and arrangement help for ministry bands.',
-        provider: { '@id': ID.person },
-        areaServed: country,
-        url: `${SITE.url}/#contact`,
-      },
+      bookingsService(),
     ],
   };
 }
@@ -203,6 +233,67 @@ export function galleryJsonLd() {
         inLanguage: 'en-ZA',
         image: photos.map((p) => imageObject(p)),
       },
+    ],
+  };
+}
+
+const faqPage = (items: FaqItem[]) => ({
+  '@type': 'FAQPage',
+  mainEntity: items.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } })),
+});
+
+export function lessonsJsonLd() {
+  const seo = PAGE_SEO.lessons;
+  const photo = PHOTOS.sunburst;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      breadcrumbJsonLd([
+        { name: 'Home', path: '/' },
+        { name: 'Bass lessons', path: seo.path },
+      ]),
+      {
+        '@type': 'WebPage',
+        '@id': ID.lessonsPage,
+        url: abs(seo.path),
+        name: seo.title,
+        description: seo.description,
+        isPartOf: { '@id': ID.website },
+        about: { '@id': ID.bassLessons },
+        primaryImageOfPage: imageObject(photo),
+        inLanguage: 'en-ZA',
+        dateModified: SITE.updated,
+      },
+      bassLessonsService(),
+      faqPage(LESSON_FAQ),
+    ],
+  };
+}
+
+export function bookingsJsonLd() {
+  const seo = PAGE_SEO.bookings;
+  const photo = PHOTOS.churchStage;
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      breadcrumbJsonLd([
+        { name: 'Home', path: '/' },
+        { name: 'Book a bassist', path: seo.path },
+      ]),
+      {
+        '@type': 'WebPage',
+        '@id': ID.bookingsPage,
+        url: abs(seo.path),
+        name: seo.title,
+        description: seo.description,
+        isPartOf: { '@id': ID.website },
+        about: { '@id': ID.bookings },
+        primaryImageOfPage: imageObject(photo),
+        inLanguage: 'en-ZA',
+        dateModified: SITE.updated,
+      },
+      bookingsService(),
+      faqPage(BOOKING_FAQ),
     ],
   };
 }

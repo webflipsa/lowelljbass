@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { BASS_ART } from '@/lib/photos';
 import { SOCIALS } from '@/lib/site';
 import ContactForm from '../ContactForm';
@@ -28,7 +29,14 @@ export default function Contact() {
               <em>your tone.</em>
             </h2>
             <p className="contact-lead">
-              Bass lessons, session work, worship-team coaching or bass player bookings — send a note and Lowell will get back to you.
+              <Link href="/bass-lessons" className="text-link">
+                Bass lessons
+              </Link>
+              , session work, worship-team coaching or{' '}
+              <Link href="/book-a-bassist" className="text-link">
+                bass player bookings
+              </Link>{' '}
+              — send a note and Lowell will get back to you.
             </p>
             <div className="contact-social">
               <SocialPills items={SOCIAL_LINKS} className="pill-ink" />

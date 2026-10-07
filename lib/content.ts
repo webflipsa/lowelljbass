@@ -15,12 +15,14 @@ export const HOME_NAV: NavItem[] = [
   { label: 'Contact', href: '#contact' },
 ];
 
-/** Gallery + Courses pages. */
+/** Gallery, Courses, Lessons and Bookings pages. Labels are kept short so the pill fits at 900px. */
 export const PAGE_NAV: NavItem[] = [
   { label: 'Home', href: '/#top', key: 'home' },
   { label: 'Media', href: '/#media', key: 'media' },
   { label: 'Gallery', href: '/gallery', key: 'gallery' },
+  { label: 'Lessons', href: '/bass-lessons', key: 'lessons' },
   { label: 'Courses', href: '/courses', key: 'courses' },
+  { label: 'Bookings', href: '/book-a-bassist', key: 'bookings' },
   { label: 'Contact', href: '/#contact', key: 'contact' },
 ];
 
@@ -174,5 +176,144 @@ export const GALLERY: GalleryYear[] = [
     tiles: [],
     emptySlots: 3,
     slotCaption: 'Drop a 2027 photo',
+  },
+];
+
+/* --------------------------------------------------- landing pages (SEO) */
+/* Copy for /bass-lessons and /book-a-bassist. Only facts the owner has confirmed (or that are already on the site)
+   belong here — no invented prices, venues, availability or testimonials. FAQ answers are plain text on purpose:
+   the same strings feed the visible FAQ and the FAQPage structured data, so the two can never disagree. */
+
+export type FaqItem = { q: string; a: string; link?: { href: string; label: string } };
+
+/** Confirmed by the owner: lessons are about an hour each at R380, taught in Pretoria and Johannesburg (and online). */
+export const LESSON_TERMS = {
+  price: 'R380',
+  priceAmount: '380',
+  currency: 'ZAR',
+  length: 'about an hour',
+  cities: ['Pretoria', 'Johannesburg'],
+} as const;
+
+/** "In the room, or online" strip on /bass-lessons. */
+export const LESSON_PLACES = [
+  { name: 'Pretoria', mode: 'In person' },
+  { name: 'Johannesburg', mode: 'In person' },
+  { name: 'Online', mode: 'Remote' },
+] as const;
+
+export type InfoCard = { kind: string; title: string; body: string };
+export type Step = { title: string; body: string };
+
+export const LESSON_WHO: InfoCard[] = [
+  {
+    kind: 'Beginners',
+    title: 'Just starting out',
+    body: 'Never played bass, or only just picked one up? Build a solid foundation in time, tone and technique from the first lesson.',
+  },
+  {
+    kind: 'Returning players',
+    title: 'Back after a break, or self-taught',
+    body: 'Fill in the gaps — groove, reading, theory and the vocabulary that turns notes into lines.',
+  },
+  {
+    kind: 'Worship bassists',
+    title: 'Serving on a worship team',
+    body: 'Learn to arrange parts, lock in with the band and play for the song, drawing on 20 years on the worship team at CRC.',
+  },
+  {
+    kind: 'Working players',
+    title: 'Gigging or session-bound',
+    body: 'Walking lines, jazz vocabulary and transcription to sharpen what you already do on stage and in the studio.',
+  },
+];
+
+/** Deliberately generic until the owner sends the real lesson structure. */
+export const LESSON_STEPS: Step[] = [
+  { title: 'Get in touch', body: 'Send a quick enquiry below and say whether you would like lessons in Pretoria, in Johannesburg or online.' },
+  { title: 'First lesson', body: 'It includes a quick tone and technique check-up, so you and Lowell know where to start.' },
+  {
+    title: 'Keep building',
+    body: 'Lessons run about an hour at R380 each. Work on groove, lines, worship-team playing, reading or theory — whatever moves your playing forward.',
+  },
+];
+
+export const LESSON_FAQ: FaqItem[] = [
+  {
+    q: 'How much do bass lessons cost?',
+    a: 'Lessons run about an hour and cost R380 each.',
+  },
+  {
+    q: 'Where do you teach bass in person?',
+    a: 'Lowell teaches bass in person in Pretoria and Johannesburg, and online as well.',
+  },
+  {
+    q: 'Can I take bass lessons online?',
+    a: 'Yes. Lessons are available both in person and online.',
+  },
+  {
+    q: 'I have never played bass. Is that a problem?',
+    a: 'Not at all. Lessons suit complete beginners right through to working players.',
+  },
+  {
+    q: 'What happens in the first lesson?',
+    a: 'The first lesson includes a quick tone and technique check-up.',
+  },
+  {
+    q: 'What styles and skills can I learn?',
+    a: 'Bass is Lowell’s main focus: groove, time-feel and the pocket; walking lines and jazz vocabulary; worship-team playing and song arrangement; and reading, theory and transcription. His background is jazz, with contemporary rock, blues, pop and worship and gospel alongside.',
+  },
+  {
+    q: 'Do you teach guitar as well?',
+    a: 'Yes. Guitar is a secondary focus, covering chords, strumming and rhythm, blues and rock foundations, and playing in a band.',
+  },
+  {
+    q: 'Can I learn at my own pace instead?',
+    a: 'The Art of the Feel is a self-paced online course on bass transcription for new and intermediate bassists.',
+    link: { href: '/courses', label: 'See the course →' },
+  },
+];
+
+export const BOOKING_SERVICES: InfoCard[] = [
+  { kind: 'Studio', title: 'Session work', body: 'Bass for recordings — lines that sit in the pocket and serve the song.' },
+  { kind: 'Stage', title: 'Live gigs & events', body: 'Feel, pocket and tone for your band, show or event.' },
+  { kind: 'Church', title: 'Worship teams', body: 'Play with your church or worship team, drawing on two decades of serving as a CRC bassist.' },
+  { kind: 'Ministry', title: 'Team coaching', body: 'Help for your bassist or your whole team — arrangement, feel and playing together.' },
+];
+
+/** Same styles as the home page's story chips. */
+export const BOOKING_STYLES = ['Jazz · roots', 'Contemporary rock', 'Blues', 'Pop', 'Worship & gospel'];
+
+export const BOOKING_STEPS: Step[] = [
+  { title: 'Tell Lowell what you need', body: 'Share the date, the place and what you have in mind — a session, a gig, a service or team coaching.' },
+  { title: 'He gets back to you', body: 'Lowell will get back to you to talk through the details.' },
+  { title: 'Lock it in', body: 'Once you are both happy with the details, you are booked.' },
+];
+
+export const BOOKING_FAQ: FaqItem[] = [
+  {
+    q: 'What can I book Lowell for?',
+    a: 'Session and studio work, live gigs and events, playing with church and worship teams, and coaching or arrangement help for worship teams.',
+  },
+  {
+    q: 'What styles does he play?',
+    a: 'Jazz is his root, alongside contemporary rock, blues, pop, and worship and gospel.',
+  },
+  {
+    q: 'Can I book him for my church or worship team?',
+    a: 'Yes. Lowell has served on the worship team at Christian Revival Church (CRC) for 20 years across Bloemfontein, Johannesburg and Pretoria, and he also coaches worship teams on arrangement and playing together.',
+  },
+  {
+    q: 'How much does a booking cost?',
+    a: 'There is no fixed price list. Send the details of what you have in mind and Lowell will get back to you.',
+  },
+  {
+    q: 'How do I book?',
+    a: 'Pick a time in the booking calendar on this page, or send an enquiry with the details using the form.',
+  },
+  {
+    q: 'Does Lowell teach as well?',
+    a: 'Yes. He teaches bass in Pretoria, Johannesburg and online, about an hour per lesson at R380.',
+    link: { href: '/bass-lessons', label: 'About bass lessons →' },
   },
 ];

@@ -5,8 +5,11 @@ import { INTEREST_OPTIONS } from '@/lib/site';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
-/** Contact form from the footer ("the body"). Posts to /api/contact, which emails Lowell via Resend. */
-export default function ContactForm() {
+/**
+ * Contact form from the footer ("the body"). Posts to /api/contact, which emails Lowell via Resend.
+ * `defaultInterest` pre-selects the dropdown (e.g. "Bass lessons" on /bass-lessons); must be one of INTEREST_OPTIONS.
+ */
+export default function ContactForm({ defaultInterest = INTEREST_OPTIONS[0] }: { defaultInterest?: (typeof INTEREST_OPTIONS)[number] }) {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
 
@@ -52,7 +55,7 @@ export default function ContactForm() {
       </div>
       <label>
         I&apos;m interested in
-        <select name="interest" defaultValue={INTEREST_OPTIONS[0]}>
+        <select name="interest" defaultValue={defaultInterest}>
           {INTEREST_OPTIONS.map((o) => (
             <option key={o}>{o}</option>
           ))}

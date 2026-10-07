@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import CalEmbed from '../CalEmbed';
 import { LESSONS } from '@/lib/content';
 import { SITE } from '@/lib/site';
@@ -48,8 +49,12 @@ export default function Lessons() {
           <div className="book-copy">
             <h3 className="book-title">Book a lesson</h3>
             <p>
-              Book bass lessons with an experienced teacher — pick a time that suits you, in person or online. First lesson includes a
-              quick tone and technique check-up.
+              Book{' '}
+              <Link href="/bass-lessons" className="lp-inline">
+                bass lessons
+              </Link>{' '}
+              with an experienced teacher — pick a time that suits you, in person or online. First lesson includes a quick tone and
+              technique check-up.
             </p>
             {/* Until the Cal.com link is configured (NEXT_PUBLIC_CAL_LINK), send people to the contact form instead of a dead link. */}
             <a href={bookingUrl || '#contact'} className="btn-amber" {...(bookingUrl ? { target: '_blank', rel: 'noopener' } : {})}>

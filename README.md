@@ -3,7 +3,8 @@
 Website for **Lowell Jeffery** — bassist, bass teacher and worship musician.
 Next.js (App Router) + TypeScript, deployed on Vercel, forms sent through Resend, bookings through Cal.com.
 
-Pages: **Home** (`/`, the "bass guitar" one-pager), **Gallery** (`/gallery`), **Courses** (`/courses`).
+Pages: **Home** (`/`, the "bass guitar" one-pager), **Bass lessons** (`/bass-lessons`), **Book a bassist** (`/book-a-bassist`),
+**Courses** (`/courses`), **Gallery** (`/gallery`).
 
 ## Run it
 
@@ -33,7 +34,8 @@ terminal instead of emailing it); in production they return a friendly error unt
 | `CONTACT_TO_EMAIL` | Inbox that receives enquiries and course sign-ups |
 | `CONTACT_FROM_EMAIL` | Sender on the verified domain, e.g. `Lowell Jeffery <website@lowelljeffery.co.za>` |
 | `NEXT_PUBLIC_SITE_URL` | `https://lowelljeffery.co.za` (canonical URLs, sitemap, Open Graph, structured data) |
-| `NEXT_PUBLIC_CAL_LINK` | Your Cal.com path, e.g. `lowelljeffery` — switches on the live booking calendar. Empty = button goes to the contact form |
+| `NEXT_PUBLIC_CAL_LINK` | Cal.com path for the **home page** lesson panel, e.g. `lowelljefffery/bass-lesson` — switches on its live calendar. Empty = button goes to the contact form |
+| `NEXT_PUBLIC_CAL_LINK_BOOKINGS` | *(optional)* Cal.com path for `/book-a-bassist`. Defaults to `lowelljefffery/bass-bookings` (note the three f's — that is the real username) |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | *(optional)* Search Console HTML-tag value |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | *(optional)* Bing Webmaster Tools value |
 
@@ -48,7 +50,8 @@ Not wired up yet. The natural seams are `app/api/subscribe/route.ts` (store cour
 ```
 app/
   page.tsx            Home — assembles the sections + the bass neck
-  gallery/ courses/   The two sub-pages (each with its own opengraph-image.tsx share card)
+  bass-lessons/ book-a-bassist/   Landing pages for "bass lessons" and "bass player bookings" (SEO pages, each with a share card)
+  gallery/ courses/   The other sub-pages (each with its own opengraph-image.tsx share card)
   api/contact|subscribe/route.ts   Resend-backed form endpoints (validation, honeypot, rate limit)
   layout.tsx          Fonts + site-wide metadata
   opengraph-image.tsx Social share card for the home page
@@ -61,12 +64,13 @@ components/
   CalEmbed.tsx CalInline.tsx   Lazy-loaded Cal.com booking widget
   JsonLd.tsx          Renders structured data
   RevealObserver.tsx  Scroll-reveal
-  SiteNav.tsx  ContactForm.tsx  NotifyForm.tsx  ui.tsx
+  SiteNav.tsx  ContactForm.tsx  NotifyForm.tsx  Faq.tsx  ui.tsx
 lib/
-  content.ts          ← edit data here: involvements, lessons, dates, testimonials, gallery
-  site.ts             Site URL, SEO title/description, social links, feature flags, Cal link
+  content.ts          ← edit data here: involvements, lessons, dates, testimonials, gallery — and the landing-page copy
+                        (lesson price/cities, "who it's for", steps, FAQs, booking services)
+  site.ts             Site URL, SEO title/description, social links, feature flags, Cal links, PAGE_SEO (the two landing pages' titles/descriptions)
   photos.ts           Photo catalogue: file names, sizes and alt text
-  structured-data.ts  schema.org JSON-LD (Person, Services, Course, ImageGallery, breadcrumbs)
+  structured-data.ts  schema.org JSON-LD (Person, Services with cities + price, FAQPage, Course, ImageGallery, breadcrumbs)
   seo.ts og.tsx       Shared metadata helpers, share-card renderer
 public/assets/img/    All images — WebP, descriptively named
 scripts/convert-image.mjs   Converts a photo to WebP with a keyword file name
@@ -76,7 +80,8 @@ docs/                 booking-cal-com.md, seo-checklist.md
 ### Common edits
 - **Upcoming dates / testimonials** — `DATES` and `TESTIMONIALS` in `lib/content.ts`. They currently hold the design's bracketed placeholders (`[Gig / service / workshop]`, `[Student quote …]`) — replace before launch.
 - **Gallery** — convert the photo (see *Images*), add it to `PHOTOS` (`lib/photos.ts`) and to a year in `GALLERY` (`lib/content.ts`); lower that year's `emptySlots` to retire a placeholder tile (`0` hides them).
-- **Search titles / descriptions** — `lib/site.ts` (home) and the `pageMetadata({...})` call at the top of `app/gallery/page.tsx` and `app/courses/page.tsx`.
+- **Search titles / descriptions** — `lib/site.ts` (home, and `PAGE_SEO` for `/bass-lessons` and `/book-a-bassist`) and the `pageMetadata({...})` call at the top of `app/gallery/page.tsx` and `app/courses/page.tsx`.
+- **Lesson price, cities, FAQs, "how it works"** — `LESSON_TERMS`, `LESSON_PLACES`, `LESSON_STEPS`, `LESSON_FAQ` (and the `BOOKING_*` equivalents) in `lib/content.ts`. The FAQ text feeds both the visible page and the FAQPage structured data, and the price feeds the structured-data Offer, so editing it in one place keeps everything consistent. Only put confirmed facts there.
 - **Social links, feature flags** — `lib/site.ts`.
 - **Courses** — the featured course lives in `components/home/Courses.tsx` (teaser) and `app/courses/page.tsx` (full page). Price is "TBC" and the buttons are `#` until a checkout exists.
 
@@ -107,6 +112,8 @@ files for layout parity — section positions and heights match the originals at
 ### Deliberate differences from the design files
 - Footer link reads "Back to lowelljeffery.co.za" (the design said `.com`).
 - **SEO wording** (light edits to the design's sentences): the story says "two decades as bassist … at Christian Revival Church (CRC)"; the booking panel says "Book bass lessons with an experienced teacher — …"; the contact line says "Bass lessons, session work, worship-team coaching or bass player bookings"; the courses page lead says "Self-paced online bass courses …". Page `<title>`s and descriptions are keyword-led rather than the design's.
+- **New pages.** `/bass-lessons` and `/book-a-bassist` are additions built in the Courses (coffee) and Gallery (dark) styles; they were not in the design files. The nav on the sub-pages gained two short links, "Lessons" and "Bookings" (the pill still fits at 900px). The home page's nav is unchanged.
+- **Home page cross-links** are inline text links only (the "bass lessons" in the booking panel, and "Bass lessons" / "bass player bookings" in the contact line), underlined; no element was added, so no section moved. The home meta description and share description now mention Pretoria and Johannesburg.
 - "Open booking calendar" opens your Cal.com page, or scrolls to the contact form until `NEXT_PUBLIC_CAL_LINK` is set (the design links to `#`); the grey scheduler placeholder becomes the live calendar.
 - Forms are real (Resend) with a honeypot, validation and an error line; the success label is the design's "Thanks — sent".
 - Gallery/Courses use the compact "Book" pill below 640px so the nav fits a phone (the design only specified their desktop nav).

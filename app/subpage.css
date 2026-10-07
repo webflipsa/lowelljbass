@@ -9,16 +9,18 @@
   min-height: 100vh;
 }
 
-/* Courses shares the home page's light-coffee surface */
-.page-courses {
+/* Courses (and Lessons) share the home page's light-coffee surface */
+.page-courses,
+.page-lessons {
   background:
     radial-gradient(ellipse 65% 45% at 10% -5%, rgba(64, 34, 16, 0.5), transparent 55%),
     radial-gradient(ellipse 70% 55% at 105% 105%, rgba(32, 17, 9, 0.6), transparent 55%),
     radial-gradient(ellipse 130% 90% at 50% 30%, rgba(196, 140, 88, 0.22), transparent 70%), #9e7148;
 }
 
-/* Gallery is darker: soft burnt-orange "light splashes" scattered down the page */
-.page-gallery {
+/* Gallery (and Bookings) are darker: soft burnt-orange "light splashes" scattered down the page */
+.page-gallery,
+.page-bookings {
   background:
     radial-gradient(ellipse 60% 30% at 12% 0%, rgba(224, 160, 74, 0.28), transparent 60%),
     radial-gradient(ellipse 50% 26% at 92% 14%, rgba(217, 130, 58, 0.22), transparent 60%),
@@ -35,7 +37,8 @@
   max-width: 1400px;
   margin: 0 auto;
 }
-.page-courses .pg-main {
+.page-courses .pg-main,
+.page-lessons .pg-main {
   gap: clamp(48px, 6vw, 80px);
   max-width: 1200px;
 }
@@ -45,7 +48,8 @@
   gap: 22px;
   max-width: 780px;
 }
-.page-courses .pg-head {
+.page-courses .pg-head,
+.page-lessons .pg-head {
   max-width: 760px;
 }
 
@@ -61,11 +65,13 @@
 .pg-back:hover {
   color: var(--cream);
 }
-.page-courses .pg-back {
+.page-courses .pg-back,
+.page-lessons .pg-back {
   color: var(--ink);
   opacity: 0.7;
 }
-.page-courses .pg-back:hover {
+.page-courses .pg-back:hover,
+.page-lessons .pg-back:hover {
   color: var(--ink);
   opacity: 1;
 }
@@ -80,12 +86,14 @@
 .pg-h1 em {
   color: var(--amber);
 }
-.page-courses .pg-h1 {
+.page-courses .pg-h1,
+.page-lessons .pg-h1 {
   text-shadow: 0 1px 0 rgba(255, 244, 230, 0.35);
   color: var(--ink);
   text-wrap: balance;
 }
-.page-courses .pg-h1 em {
+.page-courses .pg-h1 em,
+.page-lessons .pg-h1 em {
   color: var(--light);
 }
 
@@ -94,7 +102,8 @@
   line-height: 1.65;
   color: var(--muted);
 }
-.page-courses .pg-lead {
+.page-courses .pg-lead,
+.page-lessons .pg-lead {
   font-weight: 500;
   color: var(--ink);
 }
@@ -119,14 +128,17 @@
 .pg-foot a:hover {
   color: var(--cream);
 }
-.page-courses .pg-foot {
+.page-courses .pg-foot,
+.page-lessons .pg-foot {
   border-top-color: rgba(20, 12, 8, 0.25);
   color: var(--ink);
 }
-.page-courses .pg-foot a {
+.page-courses .pg-foot a,
+.page-lessons .pg-foot a {
   color: var(--ink);
 }
-.page-courses .pg-foot a:hover {
+.page-courses .pg-foot a:hover,
+.page-lessons .pg-foot a:hover {
   color: var(--cream);
 }
 
@@ -281,4 +293,453 @@
 }
 .cp-points .dot {
   background: var(--amber);
+}
+
+/* =========================================================================
+   LANDING PAGES — /bass-lessons (coffee theme, shared with Courses)
+                   /book-a-bassist (dark theme, shared with Gallery)
+   Reuses the home/courses pieces (.lesson-card, .cp-card, .book-panel, .contact-form, .btn-*, .chips)
+   and adds the shared "lp-" blocks below. Light-theme values first; .page-bookings overrides for dark.
+   ========================================================================= */
+
+.page-bookings .pg-main {
+  gap: clamp(48px, 6vw, 80px);
+  max-width: 1200px;
+}
+.page-lessons .pg-head,
+.page-bookings .pg-head {
+  max-width: 900px;
+}
+.page-lessons .pg-h1,
+.page-bookings .pg-h1 {
+  font-size: clamp(44px, 5.6vw, 80px);
+  text-wrap: balance;
+}
+
+/* ---- header: at-a-glance numbers ------------------------------------------ */
+.lp-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 44px;
+  margin-top: 6px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(20, 12, 8, 0.22);
+}
+.lp-stat {
+  display: grid;
+  gap: 4px;
+}
+.lp-stat-n {
+  font-family: var(--ff-serif);
+  font-size: 40px;
+  line-height: 1;
+  color: var(--ink);
+}
+.lp-stat-l {
+  font-size: 13px;
+  color: var(--ink);
+}
+.page-bookings .lp-stats {
+  border-top-color: rgba(243, 234, 220, 0.14);
+}
+.page-bookings .lp-stat-n {
+  color: var(--amber);
+}
+.page-bookings .lp-stat-l {
+  color: var(--muted);
+}
+
+/* ---- sections ------------------------------------------------------------------ */
+.lp-section {
+  display: grid;
+  gap: clamp(26px, 3.5vw, 40px);
+  scroll-margin-top: 100px;
+}
+.lp-head {
+  display: grid;
+  gap: 18px;
+  max-width: 760px;
+}
+.lp-h2 {
+  font-family: var(--ff-serif);
+  font-weight: 400;
+  text-shadow: 0 1px 0 rgba(255, 244, 230, 0.35);
+  font-size: clamp(38px, 4.8vw, 64px);
+  line-height: 0.98;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.lp-h2 em {
+  color: var(--light);
+}
+.lp-sub {
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--ink);
+}
+.page-bookings .lp-h2 {
+  color: var(--cream);
+  text-shadow: none;
+}
+.page-bookings .lp-h2 em {
+  color: var(--amber);
+}
+.page-bookings .lp-sub {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* ---- "in the room, or online" strip ---------------------------------------------- */
+.lp-places {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: var(--card);
+  border: 1px solid rgba(243, 234, 220, 0.07);
+  border-radius: 40px;
+  overflow: hidden;
+  color: var(--cream);
+}
+.lp-place {
+  display: grid;
+  gap: 16px;
+  align-content: end;
+  min-height: 200px;
+  padding: clamp(26px, 4vw, 48px);
+}
+.lp-place + .lp-place {
+  border-left: 1px solid rgba(243, 234, 220, 0.09);
+}
+.lp-place-mode {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 11px/1 var(--ff-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+.lp-place-mode::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+.lp-place-name {
+  font-family: var(--ff-serif);
+  font-size: clamp(34px, 4.4vw, 60px);
+  line-height: 1;
+}
+.lp-place:last-child .lp-place-mode::before {
+  background: var(--burnt);
+}
+.lp-place:last-child .lp-place-name {
+  font-style: italic;
+  color: var(--amber);
+}
+
+/* ---- info cards (who it is for, what he is available for) ----------------------------- */
+.lp-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 18px;
+}
+.lp-card {
+  background: var(--card);
+  border: 1px solid rgba(243, 234, 220, 0.07);
+  border-radius: 32px;
+  padding: clamp(24px, 3vw, 34px);
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  color: var(--cream);
+}
+.lp-card-kind {
+  font: 500 11px/1 var(--ff-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.lp-card-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.lp-card-body {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ---- numbered steps -------------------------------------------------------------------- */
+.lp-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(22px, 3vw, 40px);
+}
+.lp-step {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding-top: 22px;
+  border-top: 1px solid rgba(20, 12, 8, 0.3);
+}
+.lp-step-n {
+  font-family: var(--ff-serif);
+  font-size: clamp(44px, 5vw, 64px);
+  line-height: 1;
+  color: var(--light);
+  text-shadow: 0 1px 0 rgba(255, 244, 230, 0.2);
+}
+.lp-step-title {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.lp-step-body {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+.page-bookings .lp-step {
+  border-top-color: rgba(243, 234, 220, 0.16);
+}
+.page-bookings .lp-step-n {
+  color: var(--amber);
+  text-shadow: none;
+}
+.page-bookings .lp-step-title {
+  color: var(--cream);
+}
+.page-bookings .lp-step-body {
+  color: var(--muted);
+}
+
+/* ---- booking / enquiry ---------------------------------------------------------------------- */
+.book-copy .lp-fine {
+  font-size: 15px;
+}
+.lp-inline {
+  color: var(--amber);
+  text-underline-offset: 3px;
+}
+.lp-inline:hover {
+  color: var(--amber-hi);
+}
+/* inline text link that keeps the surrounding colour (used in running copy on the home page) */
+.text-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.text-link:hover {
+  text-decoration-thickness: 2px;
+}
+.lp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.lp-enquire {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+}
+.lp-enquire-copy {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+/* ---- FAQ ------------------------------------------------------------------------------------- */
+.faq {
+  display: grid;
+  gap: 12px;
+  max-width: 900px;
+}
+.faq-item {
+  background: var(--card);
+  border: 1px solid rgba(243, 234, 220, 0.07);
+  border-radius: 28px;
+  color: var(--cream);
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 28px;
+  border-radius: 28px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary::after {
+  content: '';
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-right: 2px solid var(--amber);
+  border-bottom: 2px solid var(--amber);
+  transform: translateY(-3px) rotate(45deg);
+  transition: transform 0.25s var(--ease);
+}
+.faq-item[open] summary::after {
+  transform: translateY(2px) rotate(-135deg);
+}
+.faq-item summary:hover {
+  background: rgba(243, 234, 220, 0.04);
+}
+.faq-item summary:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: -2px;
+}
+.faq-a {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+  padding: 0 28px 24px;
+}
+.faq-a p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 62em;
+}
+
+/* ---- "keep exploring" link cards ---------------------------------------------------------------- */
+.lp-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 18px;
+}
+.lp-link {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: clamp(26px, 3.5vw, 40px);
+  background: var(--card);
+  border: 1px solid rgba(243, 234, 220, 0.07);
+  border-radius: 36px;
+  color: var(--cream);
+  text-decoration: none;
+}
+.lp-link:hover {
+  border-color: rgba(224, 160, 74, 0.45);
+  background: #20160f;
+}
+.lp-link-kind {
+  font: 500 11px/1 var(--ff-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+.lp-link-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(26px, 2.6vw, 34px);
+  line-height: 1.1;
+}
+.lp-link-go {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--amber);
+}
+
+/* ---- bookings: photo mosaic ------------------------------------------------------------------------- */
+.bk-photos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 220px;
+  gap: 14px;
+}
+.bk-ph {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 26px;
+}
+.bk-ph--tall {
+  grid-row: span 2;
+}
+.bk-ph--wide {
+  grid-column: span 2;
+}
+
+@media (max-width: 899px) {
+  .lp-section {
+    scroll-margin-top: 90px;
+  }
+  .lp-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 18px 16px;
+  }
+  .lp-stat-n {
+    font-size: 32px;
+  }
+  .lp-stat-l {
+    font-size: 12px;
+  }
+  .lp-places {
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 28px;
+  }
+  .lp-place {
+    min-height: 0;
+    padding: 24px;
+  }
+  .lp-place + .lp-place {
+    border-left: 0;
+    border-top: 1px solid rgba(243, 234, 220, 0.09);
+  }
+  .lp-card {
+    border-radius: 26px;
+    padding: 24px;
+  }
+  .lp-link {
+    border-radius: 28px;
+    padding: 24px;
+  }
+  .faq-item {
+    border-radius: 22px;
+  }
+  .faq-item summary {
+    padding: 18px 20px;
+    border-radius: 22px;
+    font-size: 17px;
+  }
+  .faq-a {
+    padding: 0 20px 20px;
+  }
+  .bk-photos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 150px;
+    gap: 10px;
+  }
+  .bk-ph {
+    border-radius: 20px;
+  }
+  .bk-ph--tall {
+    grid-row: auto;
+  }
+  .bk-ph--wide {
+    grid-column: auto;
+  }
+  .bk-ph--wide:last-child {
+    grid-column: span 2;
+  }
 }

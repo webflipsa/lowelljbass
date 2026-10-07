@@ -4,9 +4,11 @@ The website already has a booking panel ("Book a lesson") built to show your liv
 the Cal.com side and then switches the website on. Cal.com's menus move around now and then, so if a label differs
 slightly, look for the closest match.
 
-> **Status when this was written:** `https://cal.com/lowelljeffery` returned a *404 – page not found*, so there was no public
-> page at that address yet. Either the username is something else (check Step 1) or the account setup wasn't finished.
-> Nothing on the website needs changing except one setting (Step 9).
+> **Status (updated 2026-10-08):** the real Cal.com username is **`lowelljefffery`** — with **three f's**. The earlier
+> `cal.com/lowelljeffery` (two f's) returned *404*, which is why the page looked missing. The profile currently has one event,
+> **"Bass Bookings"** (`https://cal.com/lowelljefffery/bass-bookings`), and the website already uses it on **/book-a-bassist**
+> (set in `lib/site.ts`, overridable with `NEXT_PUBLIC_CAL_LINK_BOOKINGS`). The home page's "Book a lesson" panel and
+> **/bass-lessons** don't use a calendar yet — see Step 9. The rest of this guide is the full set-up for lessons.
 
 ---
 
@@ -69,10 +71,14 @@ in Cal, leave this off and invoice/EFT as you do today.
 ## 9. Switch the website on
 1. In **Vercel → your project → Settings → Environment Variables**, add (Production + Preview):
 
-   `NEXT_PUBLIC_CAL_LINK` = `lowelljeffery` *(or whatever your username/path is — no `https://`, no `cal.com/`)*
+   `NEXT_PUBLIC_CAL_LINK` = `lowelljefffery` *(your username/path — mind the three f's; no `https://`, no `cal.com/`)*
 
-   - `lowelljeffery` → the panel shows your profile with all event types, so people choose **online** or **in person**.
-   - `lowelljeffery/first-lesson` → the panel shows just that one event (best if you want every visitor to start with a first lesson).
+   - `lowelljefffery` → the panel shows your profile with all event types, so people choose **online** or **in person**.
+   - `lowelljefffery/first-lesson` → the panel shows just that one event (best if you want every visitor to start with a first lesson).
+
+   This variable drives the **home page** lesson panel. The **/book-a-bassist** page has its own calendar
+   (`NEXT_PUBLIC_CAL_LINK_BOOKINGS`, default `lowelljefffery/bass-bookings`). **/bass-lessons** currently uses the enquiry form;
+   once there is a lesson event type, tell me and I'll embed it there too.
 2. **Redeploy** (Deployments → ⋯ → Redeploy). `NEXT_PUBLIC_` values are baked in at build time, so a redeploy is required.
 3. For local testing put the same line in `.env.local` and run `npm run dev`.
 
